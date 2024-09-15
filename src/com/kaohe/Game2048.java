@@ -86,8 +86,6 @@ public class Game2048 {
 
 //
 
-//
-
 
 class App extends JFrame implements KeyListener {
     //得分
