@@ -1,4 +1,4 @@
-package com.kaohe;
+/*package com.kaohe;
 
 import java.awt.*;
 import javax.swing.*;
@@ -12,28 +12,27 @@ public class Game2048 {
     public static void main(String[] args) {
 
 
-
         // 游戏面板模块
-        int [][]arr=new int[4][4];
+        int[][] arr = new int[4][4];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 //图片注意对应，图片指
-                JLabel img=new JLabel(new ImageIcon("D:\\code\\keshe\\IMG\\icon\\icon-"+arr[i][j]+".png"));
+                JLabel img = new JLabel(new ImageIcon("D:\\code\\keshe\\IMG\\icon\\icon-" + arr[i][j] + ".png"));
                 p3.add(img);
-                img.setBounds(5+j*105, 5+i*105, 100, 100);
+                img.setBounds(5 + j * 105, 5 + i * 105, 100, 100);
             }
         }
         //游戏失败
-        public boolean checkLeft() {//判断是否可以向左移动
-            boolean flag=true;
-            copy(arr,beifen);
+        public boolean checkLeft () {//判断是否可以向左移动
+            boolean flag = true;
+            copy(arr, beifen);
 
             //左移动
             MoveLeft(0);
             //判断是否相同
-            flag=notEquals(arr,beifen);//若不相同则返回true
+            flag = notEquals(arr, beifen);//若不相同则返回true
             //System.out.println(flag);
-            copy(beifen,arr);//恢复原来的数组
+            copy(beifen, arr);//恢复原来的数组
             return flag;
         }
 //重新开始
@@ -67,21 +66,20 @@ public class Game2048 {
 
         }
 //退出游戏
-        void savePoint() {
+        void savePoint () {
             //将最高分储存在BEST.txt
-            try{
+            try {
 
                 FileWriter fileWritter = new FileWriter(file.getName());
-                fileWritter.write(bestscore+"");
+                fileWritter.write(bestscore + "");
                 fileWritter.close();
 
-            }catch(IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 }
-
 
 
 //
@@ -93,8 +91,6 @@ class App extends JFrame implements KeyListener {
 
     //记录界面的数组
     private int[][] map = new int[4][4];
-
-
 
 
     @Override
@@ -140,12 +136,12 @@ class App extends JFrame implements KeyListener {
 
     //上移
     private void upMove() {
-        int colLength= map[0].length;
+        int colLength = map[0].length;
         for (int col = 0; col < colLength; col++) {
-            for (int row = map.length-1; row > 0; row--) {
-                if(map[row][col] == map[row - 1][col]) {
+            for (int row = map.length - 1; row > 0; row--) {
+                if (map[row][col] == map[row - 1][col]) {
                     map[row][col] = 0;
-                    map[row - 1][col] *=2;
+                    map[row - 1][col] *= 2;
                     score += map[row - 1][col];
                 }
             }
@@ -184,6 +180,7 @@ class App extends JFrame implements KeyListener {
 
     }
 }
+*/
 
 //
 
