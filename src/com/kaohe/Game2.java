@@ -9,6 +9,7 @@ import java.awt.event.KeyListener;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.Random;
+import java.util.Stack;
 
 public class Game2 extends JFrame implements ActionListener, KeyListener {
     //菜单
@@ -19,6 +20,10 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
     JMenu settingsMenu = new JMenu("设置");
     JMenuItem keepFileItem = new JMenuItem("存档");
     JMenuItem loadItem = new JMenuItem("取档");
+    JMenuItem undoItem = new JMenuItem("撤销");
+    // 存储每一步的状态
+    private Stack<int[][]> previousStates = new Stack<>();
+    private Stack<Integer> previousScores = new Stack<>();
     JMenuItem restartItem =new JMenuItem("重新开始");
 
     //获得内容面板
@@ -57,6 +62,7 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
         gameMenu.add(pauseItem);
         gameMenu.add(endItem);
         gameMenu.add(restartItem);
+        gameMenu.add(undoItem);
         menuBar.add(gameMenu);
         settingsMenu.add(keepFileItem);
         settingsMenu.add(loadItem);
@@ -64,6 +70,7 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
         beginItem.addActionListener(this);
         pauseItem.addActionListener(this);
         endItem.addActionListener(this);
+        undoItem.addActionListener(this);
         keepFileItem.addActionListener(this);
         loadItem.addActionListener(this);
         menuBar.add(settingsMenu);
@@ -91,6 +98,7 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
         scoreLabel.setBounds(10, 10, 400, 50);
         scoreLabel.setForeground(Color.WHITE);
         contentPane.add(scoreLabel);
+
 
         for (int row = 0; row < 4; row++) {
             for (int col = 0; col < 4; col++) {
@@ -213,6 +221,8 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
             }
             score=0;
             addRandomTile();
+        }else if(actionCommand.equals("撤销")){
+            undo();
         }
     }
 
@@ -240,7 +250,7 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
             throw new RuntimeException(e);
         }
     }
-
+//存档
     private void keepFile()  {
         try {
             FileWriter fileWrite = new FileWriter( new File("src/com/kaohe/file.txt"));
@@ -256,12 +266,40 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
         }
 
     }
+//保存状态
+    private void saveState() {
+        // 保存网格状态的副本
+        int[][] stateCopy = new int[4][4];
+        for (int i = 0; i < 4; i++) {
+            System.arraycopy(arr[i], 0, stateCopy[i], 0, arr[i].length);
+        }
+
+        // 将当前状态和分数压入栈中
+        previousStates.push(stateCopy);
+        previousScores.push(score);
+    }
+    //撤销操作
+    private void undo() {
+        // 如果有可以撤销的状态
+        if (!previousStates.isEmpty() && !previousScores.isEmpty()) {
+            // 从栈中取出上一步的状态和分数
+            arr = previousStates.pop();
+            score = previousScores.pop();
+
+            // 重新绘制游戏界面
+            draw();
+        } else {
+            System.out.println("没有更多操作可以撤销！");
+        }
+    }
 
 
     @Override
     public void keyTyped(KeyEvent e) {
 
     }
+
+
 
     //键盘按下监听
     @Override
@@ -270,6 +308,9 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
             return;
         }
 
+        System.out.println("an");
+        // 保存当前状态到栈中
+        saveState();
         //获取按下键的KeyCode值
         int keyCode = e.getKeyCode();
 
@@ -385,5 +426,19 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
         }
         return flag;
     }
+
+    /*//退出游戏
+    void savePoint() {
+        //将最高分储存在BEST.txt
+        try {
+
+            FileWriter fileWritter = new FileWriter(file.getName());
+            fileWritter.write(bestscore + "");
+            fileWritter.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }*/
 }
 
