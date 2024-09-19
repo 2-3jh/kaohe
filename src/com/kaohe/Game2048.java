@@ -1,3 +1,4 @@
+/*
 
 import java.awt.*;
 import javax.swing.*;
@@ -52,7 +53,7 @@ public class Game2048 extends JFrame {
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                JLabel img = new JLabel(new ImageIcon("D:\\code\\keshe\\IMG\\icon\\icon-" + arr[i][j] + ".png"));
+                JLabel img = new JLabel(new ImageIcon("" + arr[i][j] + ".png"));
                 p3.add(img);
                 img.setBounds(5 + j * 105, 5 + i * 105, 100, 100);
             }
@@ -175,6 +176,7 @@ class App extends JFrame implements KeyListener {
         //获取按下键的KeyCode值
         int keyCode = e.getKeyCode();
         //哪一种写法更好
+*/
 /*
         //对所按的键进行判断
         //左,上，右，下
@@ -191,7 +193,8 @@ class App extends JFrame implements KeyListener {
             System.out.println("下");
             downMove();
         }
-        */
+        *//*
+
         switch (keyCode) {
             case KeyEvent.VK_LEFT:
                 leftMove(); // 左移
@@ -270,3 +273,4 @@ class App extends JFrame implements KeyListener {
 
 //
 
+*/
