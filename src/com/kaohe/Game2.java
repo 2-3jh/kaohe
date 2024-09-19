@@ -19,6 +19,7 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
     JMenu settingsMenu = new JMenu("设置");
     JMenuItem keepFileItem = new JMenuItem("存档");
     JMenuItem loadItem = new JMenuItem("取档");
+    JMenuItem restartItem =new JMenuItem("重新开始");
 
     //获得内容面板
     Container contentPane = getContentPane();
@@ -52,13 +53,14 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
     //初始菜单
     private void initMenu() {
         JMenuBar menuBar = new JMenuBar();
-        JMenu settingsMenu = new JMenu("设置");
         gameMenu.add(beginItem);
         gameMenu.add(pauseItem);
         gameMenu.add(endItem);
+        gameMenu.add(restartItem);
         menuBar.add(gameMenu);
         settingsMenu.add(keepFileItem);
         settingsMenu.add(loadItem);
+        restartItem.addActionListener(this);
         beginItem.addActionListener(this);
         pauseItem.addActionListener(this);
         endItem.addActionListener(this);
@@ -90,7 +92,6 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
         scoreLabel.setForeground(Color.WHITE);
         contentPane.add(scoreLabel);
 
-
         for (int row = 0; row < 4; row++) {
             for (int col = 0; col < 4; col++) {
                 JLabel img = new JLabel(new ImageIcon("image/" + arr[row][col] + ".png"));
@@ -109,7 +110,31 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
     //游戏结束
     public void check() {
         if (leftMove(0) == 0 && rightMove(0) == 0 && upMove(0) == 0 && downMove(0) == 0) {
-            System.exit(0);
+
+
+
+            contentPane.removeAll();
+
+            JLabel scoreLabel = new JLabel("得分：" + score+" 游戏结束 ");
+            scoreLabel.setFont(new Font("宋体", Font.BOLD, 30));
+            scoreLabel.setBounds(10, 10, 400, 50);
+            scoreLabel.setForeground(Color.WHITE);
+            contentPane.add(scoreLabel);
+
+            for (int row = 0; row < 4; row++) {
+                for (int col = 0; col < 4; col++) {
+                    JLabel img = new JLabel(new ImageIcon("image/" + arr[row][col] + ".png"));
+                    img.setBounds(10 + col * 100, 90 + row * 100, 90, 90);
+                    contentPane.add(img);
+                }
+            }
+
+            JLabel img = new JLabel(new ImageIcon("image/background.png"));
+            img.setBounds(0, 80, 410, 410);
+            contentPane.add(img);
+
+            contentPane.repaint();
+
         }
     }
 
@@ -142,6 +167,8 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
                     arr[index / 4][index % 4] = 4;
                 }
                 draw();
+                //判断是否能移动
+                check();
                 return;
             }
             index++;
@@ -178,15 +205,38 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
             keepFile();
         } else if (actionCommand.equals("取档")) {
             loadFile();
+        }else if(actionCommand.equals("重新开始")){
+            for (int row = 0; row < arr.length; row++) {
+                for (int col = 0; col < arr[row].length; col++) {
+                    arr[row][col]=0;
+                }
+            }
+            score=0;
+            addRandomTile();
         }
     }
 
     private void loadFile() {
         File file = new File("src/com/kaohe/file.txt");
         try {
-            FileInputStream fis = new FileInputStream(file);
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            int index=0;
+            score=Integer.parseInt(bufferedReader.readLine());
+            while(true){
+                String str=bufferedReader.readLine();
+                if(str==null){
+                    break;
+                }
+                arr[index/4][index%4]=Integer.parseInt(str);
+                index++;
+            }
+            bufferedReader.close();
+            draw();
 
         } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -194,10 +244,10 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
     private void keepFile()  {
         try {
             FileWriter fileWrite = new FileWriter( new File("src/com/kaohe/file.txt"));
+            fileWrite.write(score+"\n");
             for (int row = 0; row < arr.length; row++) {
                 for (int col = 0; col < arr[row].length; col++) {
-                    fileWrite.write(arr[row][col]);
-                    System.out.println("ok");
+                    fileWrite.write(arr[row][col]+"\n");
                 }
             }
             fileWrite.close();
@@ -220,7 +270,6 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
             return;
         }
 
-        System.out.println("an");
         //获取按下键的KeyCode值
         int keyCode = e.getKeyCode();
 
@@ -336,19 +385,5 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
         }
         return flag;
     }
-
-    /*//退出游戏
-    void savePoint() {
-        //将最高分储存在BEST.txt
-        try {
-
-            FileWriter fileWritter = new FileWriter(file.getName());
-            fileWritter.write(bestscore + "");
-            fileWritter.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
 }
 
