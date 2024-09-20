@@ -45,11 +45,12 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
         //初始化按钮
         initMenu();
 
-        //绘制游戏界面
-        draw();
+        //随机生成
+        addRandomTile();
 
         //随机生成
         addRandomTile();
+
 
         //设置为可见
         this.setVisible(true);
@@ -166,10 +167,10 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
         // 随机选择一个空白位置
         Random r = new Random();
         int index = r.nextInt(16);
-        int count = r.nextInt();
+        int count = r.nextInt(2);
         while (true) {
             if (arr[index / 4][index % 4] == 0) {
-                if (count % 2 == 0) {
+                if (count==0) {
                     arr[index / 4][index % 4] = 2;
                 } else {
                     arr[index / 4][index % 4] = 4;
@@ -308,7 +309,6 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
             return;
         }
 
-        System.out.println("an");
         // 保存当前状态到栈中
         saveState();
         //获取按下键的KeyCode值
@@ -426,19 +426,5 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
         }
         return flag;
     }
-
-    /*//退出游戏
-    void savePoint() {
-        //将最高分储存在BEST.txt
-        try {
-
-            FileWriter fileWritter = new FileWriter(file.getName());
-            fileWritter.write(bestscore + "");
-            fileWritter.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
 }
 
