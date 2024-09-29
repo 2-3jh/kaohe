@@ -116,9 +116,20 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
         contentPane.repaint();
     }
 
+    //判断是否有2048
+    public boolean judge2048(){
+        for (int row = 0; row < arr.length; row++) {
+            for (int col = 0; col < arr[row].length; col++) {
+                if(arr[row][col] == 2048){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     //游戏结束
     public void check() {
-        if (leftMove(0) == 0 && rightMove(0) == 0 && upMove(0) == 0 && downMove(0) == 0) {
+        if ((leftMove(0) == 0 && rightMove(0) == 0 && upMove(0) == 0 && downMove(0) == 0)||judge2048()) {
 
 
 
@@ -221,6 +232,7 @@ public class Game2 extends JFrame implements ActionListener, KeyListener {
                 }
             }
             score=0;
+            addRandomTile();
             addRandomTile();
         }else if(actionCommand.equals("撤销")){
             undo();
